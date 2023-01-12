@@ -17,7 +17,7 @@ class Lead(models.Model):
     age = models.IntegerField(default=0)
 
     # Foreign key field -> relationships between models
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE) #if "Agent" -> means Agent is inside the file (otherwise order matters)
+    agent = models.ForeignKey("Agent", on_delete=models.CASCADE) #if "Agent" -> means Agent is inside the file (otherwise order matters)
     # on_delete => if agent is deleted, do: 
     # - models.CASCADE → delete a lead
     # - models.SETNULL +null=True → set it to NULL
