@@ -11,7 +11,11 @@
 <body>
     <h1>Hello world</h1>
     <p>Here is our second page.</p>
-
+    <ul>
+        {% for lead in leads%}
+        <li>{{ lead.first_name }}</li>
+        {% endfor %}
+    </ul>
 </body>
 
 </html>
