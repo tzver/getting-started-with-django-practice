@@ -56,7 +56,7 @@ def lead_update(request, pk):
 def lead_delete(request, pk):
     lead = Lead.objects.get(id=pk)
     lead.delete()
-    return redirect("leads/")
+    return redirect("/leads")
 
 # def lead_update(request, pk):
 #     lead = Lead.objects.get(id=pk)
