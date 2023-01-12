@@ -4,5 +4,5 @@ from .views import home_page
 app_name = "leads"
 
 urlpatterns = [
-    path('all/', home_page)
+    path('', home_page)
 ]
