@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.views import generic # -> better
 from .models import Lead, Agent
 from .forms import LeadForm, LeadModelForm, CustomerUserCreation
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here -> how to handle web requests
 
 # CRUD - create, retrieve, update, delete + list (lead_list) -> every page fall sunder one of these
@@ -23,21 +23,15 @@ class SignUpView(generic.CreateView):
         return reverse("login") # "/leads" is manual -> this better
 
 
-
-
-
-
-
-
 # Can also use class based views
-class LandingPageView(generic.TemplateView): # inherit from django class based views
+class LandingPageView(LoginRequiredMixin, generic.TemplateView): # inherit from django class based views
     template_name = "landing.html" #required for TemplateView
 
 def landing_page(request):
     return render(request, "landing.html")
 
 
-class LeadListView(generic.ListView):
+class LeadListView(LoginRequiredMixin, generic.ListView):
     template_name = "leads/lead_list.html"
     queryset = Lead.objects.all() # -> passed into context
     context_object_name = "leads" #specify the var in the template
@@ -50,7 +44,7 @@ class LeadListView(generic.ListView):
 #     }
 #     return render(request,"leads/lead_list.html", context)
 
-class LeadDetailView(generic.DetailView):
+class LeadDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "leads/lead_detail.html"
     queryset = Lead.objects.all() # -> passed into context
     context_object_name = "lead" #specify the var in the template
@@ -63,7 +57,7 @@ class LeadDetailView(generic.DetailView):
 #     return render(request,"leads/lead_detail.html", context)
 
 
-class LeadCreateView(generic.CreateView):
+class LeadCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "leads/lead_create.html"
     # queryset = Lead.objects.all() # -> passed into context
     form_class = LeadModelForm
@@ -99,7 +93,7 @@ class LeadCreateView(generic.CreateView):
 
 
 
-class LeadUpdateView(generic.UpdateView):
+class LeadUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = "leads/lead_update.html"
     queryset = Lead.objects.all() # -> passed into context
     form_class = LeadModelForm
@@ -123,7 +117,7 @@ class LeadUpdateView(generic.UpdateView):
 #     return render(request,"leads/lead_update.html", context)
 
 
-class LeadDeleteView(generic.DeleteView):
+class LeadDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = "leads/lead_delete.html"
     queryset = Lead.objects.all() # -> passed into context
 

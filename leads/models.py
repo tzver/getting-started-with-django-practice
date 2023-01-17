@@ -8,9 +8,17 @@ class User(AbstractUser):
     # cellphone_number = models.CharField(max_length=15)
     pass
 
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) #1 user to one agent -> one to one field
-
+    organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE) # if the user profile is deleted, all agents will be deleted as well
     def __str__(self):
         return self.user.email
 
