@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from leads.views import landing_page
+from leads.views import landing_page, LandingPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name='landing-page'),
+    path('', LandingPageView.as_view(), name='landing-page'), #class based view! have a different command
     path('leads/', include('leads.urls', namespace="leads"))
 ]

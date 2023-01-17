@@ -1,75 +1,114 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views import generic # -> better
 from .models import Lead, Agent
 from .forms import LeadForm, LeadModelForm
 
 # Create your views here -> how to handle web requests
 
+# CRUD - create, retrieve, update, delete + list (lead_list) -> every page fall sunder one of these
+
+
 # Can also use class based views
-class LandingPageView(TemplateView): # inherit from django class based views
+class LandingPageView(generic.TemplateView): # inherit from django class based views
     template_name = "landing.html" #required for TemplateView
-    
-
-
 
 def landing_page(request):
     return render(request, "landing.html")
 
 
-def lead_list(request):
-    # return HttpResponse("Hello world")
-    leads = Lead.objects.all()
-    context = {
-        "leads": leads
-    }
-    return render(request,"leads/lead_list.html", context)
+class LeadListView(generic.ListView):
+    template_name = "leads/lead_list.html"
+    queryset = Lead.objects.all() # -> passed into context
+    context_object_name = "leads" #specify the var in the template
+
+# def lead_list(request):
+#     # return HttpResponse("Hello world")
+#     leads = Lead.objects.all()
+#     context = {
+#         "object_list": leads
+#     }
+#     return render(request,"leads/lead_list.html", context)
+
+class LeadDetailView(generic.DetailView):
+    template_name = "leads/lead_detail.html"
+    queryset = Lead.objects.all() # -> passed into context
+    context_object_name = "lead" #specify the var in the template
+
+# def lead_detail(request, pk):
+#     lead = Lead.objects.get(id=pk)
+#     context = {
+#         "lead": lead
+#     }
+#     return render(request,"leads/lead_detail.html", context)
+
+
+class LeadCreateView(generic.CreateView):
+    template_name = "leads/lead_create.html"
+    # queryset = Lead.objects.all() # -> passed into context
+    form_class = LeadModelForm
+
+    # WHat to do when the form is submitted successfully
+    def get_success_url(self) -> str:
+        return reverse("leads:lead-list") # "/leads" is manual -> this better
+
+# def lead_create(request):
+#     form = LeadModelForm()
+#     if request.method == "POST":
+#         form = LeadModelForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("/leads")
+#     context = {
+#         "form": form #create an instance of the form; can validate the info
+#     }
+#     return render(request, "leads/lead_create.html", context)
 
 
 
-def lead_detail(request, pk):
-    lead = Lead.objects.get(id=pk)
-    context = {
-        "lead": lead
-    }
-    return render(request,"leads/lead_detail.html", context)
+
+class LeadUpdateView(generic.UpdateView):
+    template_name = "leads/lead_update.html"
+    queryset = Lead.objects.all() # -> passed into context
+    form_class = LeadModelForm
+
+    # WHat to do when the form is submitted successfully
+    def get_success_url(self) -> str:
+        return reverse("leads:lead-list") # "/leads" is manual -> this better
+
+# def lead_update(request, pk):
+#     lead = Lead.objects.get(id=pk)
+#     form = LeadModelForm(instance=lead) #grab an instance and update it!
+#     if request.method == "POST":
+#         form = LeadModelForm(request.POST, instance=lead)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("/leads")
+#     context = {
+#         "lead": lead,
+#         "form": form
+#     }
+#     return render(request,"leads/lead_update.html", context)
 
 
+class LeadDeleteView(generic.DeleteView):
+    template_name = "leads/lead_delete.html"
+    queryset = Lead.objects.all() # -> passed into context
+
+    # WHat to do when the form is submitted successfully
+    def get_success_url(self) -> str:
+        return reverse("leads:lead-list") # "/leads" is manual -> this better
 
 
-def lead_create(request):
-    form = LeadModelForm()
-    if request.method == "POST":
-        form = LeadModelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/leads")
-    context = {
-        "form": form #create an instance of the form; can validate the info
-    }
-    return render(request, "leads/lead_create.html", context)
+# def lead_delete(request, pk):
+#     lead = Lead.objects.get(id=pk)
+#     lead.delete()
+#     return redirect("/leads")
 
 
+########### OLD CODE ############
 
-def lead_update(request, pk):
-    lead = Lead.objects.get(id=pk)
-    form = LeadModelForm(instance=lead) #grab an instance and update it!
-    if request.method == "POST":
-        form = LeadModelForm(request.POST, instance=lead)
-        if form.is_valid():
-            form.save()
-            return redirect("/leads")
-    context = {
-        "lead": lead,
-        "form": form
-    }
-    return render(request,"leads/lead_update.html", context)
-
-
-def lead_delete(request, pk):
-    lead = Lead.objects.get(id=pk)
-    lead.delete()
-    return redirect("/leads")
 
 # def lead_update(request, pk):
 #     lead = Lead.objects.get(id=pk)
