@@ -1,14 +1,32 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.core.mail import send_mail
+# from django.contrib.auth.forms import UserCreationForm
 # from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import generic # -> better
 from .models import Lead, Agent
-from .forms import LeadForm, LeadModelForm
+from .forms import LeadForm, LeadModelForm, CustomerUserCreation
 
 # Create your views here -> how to handle web requests
 
 # CRUD - create, retrieve, update, delete + list (lead_list) -> every page fall sunder one of these
+
+
+
+class SignUpView(generic.CreateView):
+    template_name = "registration/signup.html"
+        # queryset = Lead.objects.all() # -> passed into context
+    form_class = CustomerUserCreation # custom on ethat uses our own model
+
+    # WHat to do when the form is submitted successfully
+    def get_success_url(self) -> str:
+        return reverse("login") # "/leads" is manual -> this better
+
+
+
+
+
+
 
 
 # Can also use class based views
