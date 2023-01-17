@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
+from django.core.mail import send_mail
 # from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import generic # -> better
 from .models import Lead, Agent
@@ -52,6 +53,18 @@ class LeadCreateView(generic.CreateView):
     # WHat to do when the form is submitted successfully
     def get_success_url(self) -> str:
         return reverse("leads:lead-list") # "/leads" is manual -> this better
+
+
+    def form_valid(self, form):
+        # TODO: send email
+        send_mail(
+            subject="A lead has been created", 
+            message="Go to the site to see the new lead",
+            from_email="tzver@outlook.com",
+            recipient_list=["tzver@outlook.com"]
+
+        )
+        return super(LeadCreateView, self).form_valid(form) #continue what it was going to do in form_valid -> only add sth in between processes
 
 # def lead_create(request):
 #     form = LeadModelForm()
