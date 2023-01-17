@@ -1,9 +1,22 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 from .models import Lead, Agent
 from .forms import LeadForm, LeadModelForm
 
-# Create your views here.
+# Create your views here -> how to handle web requests
+
+# Can also use class based views
+class LandingPageView(TemplateView): # inherit from django class based views
+    template_name = "landing.html" #required for TemplateView
+    
+
+
+
+def landing_page(request):
+    return render(request, "landing.html")
+
+
 def lead_list(request):
     # return HttpResponse("Hello world")
     leads = Lead.objects.all()
