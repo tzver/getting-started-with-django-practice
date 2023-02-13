@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import pre_save, post_save
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -38,3 +39,14 @@ class Lead(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
+def post_user_created_signal(sender, instance, created, **kwargs):
+    # call this function when recieving the post_signal event 
+    # created -> true if user is created only
+    print(instance, created)
+    if created:
+        UserProfile.objects.create(user=instance)
+
+# once user model is created, django will send post signal, and that funct will 
+# handle the event
+post_save.connect(post_user_created_signal, sender=User)

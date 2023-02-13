@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name='landing-page'), #class based view! have a different command
     path('leads/', include('leads.urls', namespace="leads")),
+    path('agents/', include('agents.urls', namespace="agents")),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout')
